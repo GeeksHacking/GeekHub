@@ -31,7 +31,7 @@ namespace GeekHub
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => { options.SignIn.RequireConfirmedEmail = false; })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
