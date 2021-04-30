@@ -8,3 +8,4 @@ riderModule.iml
 .vs/
 
 app.db
+*.log
