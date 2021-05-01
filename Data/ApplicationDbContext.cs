@@ -1,12 +1,10 @@
-﻿using GeekHub.Models;
-using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using IdentityServer4.EntityFramework.Options;
+
+using GeekHub.Models;
 
 namespace GeekHub.Data
 {
@@ -17,5 +15,9 @@ namespace GeekHub.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+        
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Tag> Tags { get; set; }
     }
 }
