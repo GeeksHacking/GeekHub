@@ -15,7 +15,7 @@ namespace GeekHub.Extensions
         {
             foreach (Permission permission in Enum.GetValues(typeof(Permission)))
             {
-                await roleManager.AddClaimAsync(role, new Claim("Permission", permission.ToString()));
+                await roleManager.AddClaimAsync(role, new Claim(CustomClaimTypes.Permission, permission.ToString()));
             }
         }
 
@@ -30,7 +30,7 @@ namespace GeekHub.Extensions
             
             foreach (var permission in permissions)
             {
-                await roleManager.AddClaimAsync(role, new Claim("Permission", permission.ToString()));
+                await roleManager.AddClaimAsync(role, new Claim(CustomClaimTypes.Permission, permission.ToString()));
             }
         }
     }

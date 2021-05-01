@@ -10,6 +10,7 @@
         UpdateTask,
         DeleteTask,
         
-        AddUser
+        AddUser,
+        RemoveUser
     }
 }

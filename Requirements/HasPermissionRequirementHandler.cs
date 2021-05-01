@@ -38,7 +38,7 @@ namespace GeekHub.Requirements
 
             // Then we check if they have the required claim
             var hasClaim = await _dbContext.RoleClaims.Where(rc =>
-                roles.Contains(rc.RoleId) && rc.ClaimType == "Permission" &&
+                roles.Contains(rc.RoleId) && rc.ClaimType == CustomClaimTypes.Permission &&
                 rc.ClaimValue == requirement.Permission.ToString()).SingleOrDefaultAsync();
 
             if (hasClaim != default(IdentityRoleClaim<Guid>)) context.Succeed(requirement);

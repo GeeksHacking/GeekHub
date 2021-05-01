@@ -8,7 +8,7 @@ namespace GeekHub.Attributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (value is null || string.IsNullOrWhiteSpace(value.ToString())) return ValidationResult.Success;
+            if (value is null) return ValidationResult.Success;
 
             if (!Uri.TryCreate(value.ToString(), UriKind.Absolute, out var uri))
                 return new ValidationResult("Invalid Url");
