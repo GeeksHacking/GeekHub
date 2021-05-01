@@ -4,11 +4,11 @@ using GeekHub.Models;
 
 namespace GeekHub.Requirements
 {
-    public class HasPermissionRequirement: IAuthorizationRequirement
+    public class PermissionRequirement: IAuthorizationRequirement
     {
         public Permission Permission { get; }
 
-        public HasPermissionRequirement(Permission permission)
+        public PermissionRequirement(Permission permission)
         {
             Permission = permission;
         }

@@ -11,19 +11,17 @@ using GeekHub.Models;
 
 namespace GeekHub.Requirements
 {
-    public class HasPermissionRequirementHandler : AuthorizationHandler<HasPermissionRequirement, Project>
+    public class PermissionRequirementHandler : AuthorizationHandler<PermissionRequirement, Project>
     {
-        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ApplicationDbContext _dbContext;
 
-        public HasPermissionRequirementHandler(RoleManager<ApplicationRole> roleManager, ApplicationDbContext dbContext)
+        public PermissionRequirementHandler(ApplicationDbContext dbContext)
         {
-            _roleManager = roleManager;
             _dbContext = dbContext;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
-            HasPermissionRequirement requirement,
+            PermissionRequirement requirement,
             Project resource)
         {
             var validUserId = Guid.TryParse(context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId);

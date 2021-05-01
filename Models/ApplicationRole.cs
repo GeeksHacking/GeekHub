@@ -7,5 +7,6 @@ namespace GeekHub.Models
     {
         public Guid ProjectId { get; set; }
         public Project Project { get; set; }
+        public RoleType RoleType { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace GeekHub.Requirements
                 throw new Exception("Could not resolve permission policy");
 
             policy = new AuthorizationPolicyBuilder()
-                .AddRequirements(new HasPermissionRequirement(permission))
+                .AddRequirements(new PermissionRequirement(permission))
                 .Build();
 
             _options.AddPolicy(policyName, policy);

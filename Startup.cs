@@ -50,7 +50,7 @@ namespace GeekHub
 
             services.AddAuthorization();
 
-            services.AddTransient<IAuthorizationHandler, HasPermissionRequirementHandler>();
+            services.AddTransient<IAuthorizationHandler, PermissionRequirementHandler>();
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
             // Add mappings

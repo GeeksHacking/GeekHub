@@ -17,8 +17,9 @@ namespace GeekHub.Extensions
         {
             await roleManager.CreateAsync(new ApplicationRole
             {
-                Name = $"Projects/{project.Id.ToString()}/Owner",
-                Project = project
+                Name = $"Projects/{project.Id.ToString()}/{RoleType.Owner.ToString()}",
+                Project = project,
+                RoleType = RoleType.Owner
             });
             var owner = await roleManager.FindByNameAsync($"Projects/{project.Id.ToString()}/Owner");
             await roleManager.AddOwnerPermissionClaims(owner);
@@ -28,8 +29,9 @@ namespace GeekHub.Extensions
         {
             await roleManager.CreateAsync(new ApplicationRole
             {
-                Name = $"Projects/{project.Id.ToString()}/Collaborator",
-                Project = project
+                Name = $"Projects/{project.Id.ToString()}/{RoleType.Collaborator.ToString()}",
+                Project = project,
+                RoleType = RoleType.Collaborator
             });
             var collaborator = await roleManager.FindByNameAsync($"Projects/{project.Id.ToString()}/Collaborator");
             await roleManager.AddCollaboratorPermissionClaims(collaborator);

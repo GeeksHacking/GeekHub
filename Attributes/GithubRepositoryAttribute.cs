@@ -8,6 +8,7 @@ namespace GeekHub.Attributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            // Only validate if user provides a value, else return vacuously true 
             if (value is null) return ValidationResult.Success;
 
             if (!Uri.TryCreate(value.ToString(), UriKind.Absolute, out var uri))
