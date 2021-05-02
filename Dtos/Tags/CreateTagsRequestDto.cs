@@ -5,6 +5,6 @@ namespace GeekHub.Dtos.Tags
 {
     public class CreateTagsRequestDto
     {
-        [Required] public IEnumerable<string> Names { get; set; }
+        [Required] public string Name { get; set; }
     }
 }
