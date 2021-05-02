@@ -14,7 +14,7 @@ using Serilog;
 
 namespace GeekHub.Controllers
 {
-    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Authorize]
     [AddUserId]
     [ApiController]
     [Route("Projects/{projectId:guid}/[controller]")]
