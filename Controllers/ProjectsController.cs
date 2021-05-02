@@ -133,7 +133,7 @@ namespace GeekHub.Controllers
             }
         }
 
-        [HttpPut("{projectId:guid}")]
+        [HttpPatch("{projectId:guid}")]
         public async Task<ActionResult<ProjectResponseDto>> UpdateProject(
             [FromRoute] Guid projectId,
             [FromBody] UpdateProjectRequestDto updateProjectRequestDto
