@@ -12,7 +12,6 @@ using Refit;
 using Serilog;
 using GeekHub.Attributes;
 using GeekHub.Data;
-using GeekHub.Dtos.Language;
 using GeekHub.Dtos.Project;
 using GeekHub.Extensions;
 using GeekHub.Models;
@@ -134,46 +133,7 @@ namespace GeekHub.Controllers
             }
         }
 
-        [HttpGet("{projectId:guid}")]
-        public async Task<ActionResult<ProjectResponseDto>> ReadProject(
-            [FromRoute] Guid projectId
-        )
-        {
-            try
-            {
-                var project = await _dbContext.Projects.FindAsync(projectId);
-                if (project is null) return NotFound();
-
-                return Ok(_mapper.Map<ProjectResponseDto>(project));
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception, "Fatal error while reading project");
-                return Problem();
-            }
-        }
-
-        [HttpGet("{projectId:guid}/Languages")]
-        public async Task<ActionResult<IEnumerable<LanguageResponseDto>>> ReadProjectLanguages(
-            [FromRoute] Guid projectId
-        )
-        {
-            try
-            {
-                var project = await _dbContext.Projects.Include(p => p.Languages)
-                    .SingleOrDefaultAsync(p => p.Id == projectId);
-                if (project == default(Project)) return NotFound();
-
-                return Ok(_mapper.Map<List<LanguageResponseDto>>(project.Languages));
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception, "Fatal error while reading project");
-                return Problem();
-            }
-        }
-
-        [HttpPut("{projectId:guid}")]
+        [HttpPatch("{projectId:guid}")]
         public async Task<ActionResult<ProjectResponseDto>> UpdateProject(
             [FromRoute] Guid projectId,
             [FromBody] UpdateProjectRequestDto updateProjectRequestDto
@@ -221,7 +181,7 @@ namespace GeekHub.Controllers
                     project.Languages.Clear();
                     await _dbContext.SaveChangesAsync();
 
-                    var dbLanguages = await _dbContext.Languages.Where(l => languages.Contains(l.Name)).Include(l => l.Projects).ToListAsync();
+                    var dbLanguages = await _dbContext.Languages.Where(l => languages.Contains(l.Name)).ToListAsync();
 
                     foreach (var language in languages)
                     {
@@ -241,7 +201,7 @@ namespace GeekHub.Controllers
                         else
                         {
                             // Add project to language if it exists
-                            dbLanguage.Projects.Add(project);
+                            project.Languages.Add(dbLanguage);
                         }
                     }
                 }
