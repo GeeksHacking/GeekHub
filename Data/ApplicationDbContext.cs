@@ -15,9 +15,21 @@ namespace GeekHub.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
-        
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<Ticket>()
+                .HasOne(t => t.Reporter)
+                .WithMany(u => u.ReportedTickets);
+            builder.Entity<Ticket>()
+                .HasOne(t => t.Assignee)
+                .WithMany(u => u.AssignedTickets);
+        }
+
         public DbSet<Language> Languages { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Tag> Tags { get; set; }
     }
 }
