@@ -9,9 +9,13 @@ namespace GeekHub.Models
         public string Description { get; set; }
         public TicketType TicketType { get; set; }
         public TicketStatus TicketStatus { get; set; }
+        public Guid ProjectId { get; set; }
         public Project Project { get; set; }
-        public ApplicationUser Reporter { get; set; }
-        public ApplicationUser Assignee { get; set; }
-        public Ticket ParentTicket { get; set; }
+        public Guid? ReporterId { get; set; }
+        public virtual ApplicationUser Reporter { get; set; }
+        public Guid? AssigneeId { get; set; }
+        public virtual ApplicationUser Assignee { get; set; }
+        public Guid? ParentTicketId { get; set; }
+        public virtual Ticket ParentTicket { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 using GeekHub.Attributes;
 
-namespace GeekHub.Dtos.Project
+namespace GeekHub.DTOs.Project
 {
     public class CreateProjectRequestDto
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using GeekHub.Dtos.ApplicationUser;
+using GeekHub.DTOs.ApplicationUser;
 using GeekHub.Models;
 
-namespace GeekHub.Dtos.Ticket
+namespace GeekHub.DTOs.Ticket
 {
     public class TicketResponseDto
     {
@@ -11,8 +11,8 @@ namespace GeekHub.Dtos.Ticket
         public string Description { get; set; }
         public TicketType TicketType { get; set; }
         public TicketStatus TicketStatus { get; set; }
-        public ApplicationUserResponseDto Reporter { get; set; }
-        public ApplicationUserResponseDto Assignee { get; set; }
-        public TicketResponseDto ParentTicket { get; set; }
+        public Guid? ReporterId { get; set; }
+        public Guid? AssigneeId { get; set; }
+        public Guid? ParentTicketId { get; set; }
     }
 }

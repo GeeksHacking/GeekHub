@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-using GeekHub.Dtos.Project;
+using GeekHub.DTOs.Project;
 using GeekHub.Models;
 
 namespace GeekHub.Profiles

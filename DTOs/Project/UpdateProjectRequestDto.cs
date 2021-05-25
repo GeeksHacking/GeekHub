@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using GeekHub.Attributes;
 
-namespace GeekHub.Dtos.Project
+namespace GeekHub.DTOs.Project
 {
     public class UpdateProjectRequestDto
     {

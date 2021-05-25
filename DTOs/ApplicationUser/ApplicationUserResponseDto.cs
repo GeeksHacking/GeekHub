@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GeekHub.Dtos.ApplicationUser
+namespace GeekHub.DTOs.ApplicationUser
 {
     public class ApplicationUserResponseDto
     {

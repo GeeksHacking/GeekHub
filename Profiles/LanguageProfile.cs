@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using GeekHub.Dtos.Language;
+using GeekHub.DTOs.Language;
 using GeekHub.Models;
 
 namespace GeekHub.Profiles

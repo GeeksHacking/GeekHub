@@ -12,7 +12,7 @@ using Refit;
 using Serilog;
 using GeekHub.Attributes;
 using GeekHub.Data;
-using GeekHub.Dtos.Project;
+using GeekHub.DTOs.Project;
 using GeekHub.Extensions;
 using GeekHub.Models;
 using GeekHub.Services;
@@ -50,14 +50,14 @@ namespace GeekHub.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProjectResponseDto>>> ReadProjects()
+        public async Task<ActionResult<IEnumerable<ProjectResponseDto>>> ReadProjects()
         {
             Debug.Assert(HttpContext.Items["UserId"] != null, "HttpContext.Items['UserId'] != null");
             var userId = (Guid) HttpContext.Items["UserId"];
 
             var user = await _dbContext.Users.Where(u => u.Id == userId).Include(u => u.Projects).SingleAsync();
 
-            return Ok(_mapper.Map<List<ProjectResponseDto>>(user.Projects));
+            return Ok(_mapper.Map<IEnumerable<ProjectResponseDto>>(user.Projects));
         }
 
         [HttpPost]
