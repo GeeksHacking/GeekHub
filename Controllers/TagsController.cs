@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using GeekHub.Attributes;
 using GeekHub.Data;
-using GeekHub.Dtos.Tags;
+using GeekHub.DTOs.Tags;
 using GeekHub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +43,7 @@ namespace GeekHub.Controllers
                     .SingleOrDefaultAsync(p => p.Id == projectId);
                 if (project == default(Project)) return NotFound();
 
-                return Ok(_mapper.Map<List<TagResponseDto>>(project.Tags));
+                return Ok(_mapper.Map<IEnumerable<TagResponseDto>>(project.Tags));
             }
             catch (Exception exception)
             {

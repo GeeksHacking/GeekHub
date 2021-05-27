@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GeekHub.Dtos.Tags
+namespace GeekHub.DTOs.Tags
 {
     public class TagResponseDto
     {

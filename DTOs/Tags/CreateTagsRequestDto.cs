@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GeekHub.Dtos.Tags
+namespace GeekHub.DTOs.Tags
 {
     public class CreateTagsRequestDto
     {

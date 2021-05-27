@@ -1,4 +1,4 @@
-﻿namespace GeekHub.Dtos.Language
+﻿namespace GeekHub.DTOs.Language
 {
     public class LanguageResponseDto
     {

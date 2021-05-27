@@ -6,9 +6,9 @@
         UpdateProject,
         DeleteProject,
         
-        CreateTask,
-        UpdateTask,
-        DeleteTask,
+        CreateTicket,
+        UpdateTicket,
+        DeleteTicket,
         
         AddUser,
         RemoveUser

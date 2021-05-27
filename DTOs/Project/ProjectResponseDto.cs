@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GeekHub.Dtos.Project
+namespace GeekHub.DTOs.Project
 {
     public class ProjectResponseDto
     {

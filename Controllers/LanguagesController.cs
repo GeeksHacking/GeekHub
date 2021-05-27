@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using GeekHub.Attributes;
 using GeekHub.Data;
-using GeekHub.Dtos.Language;
+using GeekHub.DTOs.Language;
 using GeekHub.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +38,7 @@ namespace GeekHub.Controllers
                     .SingleOrDefaultAsync(p => p.Id == projectId);
                 if (project == default(Project)) return NotFound();
 
-                return Ok(_mapper.Map<List<LanguageResponseDto>>(project.Languages));
+                return Ok(_mapper.Map<IEnumerable<LanguageResponseDto>>(project.Languages));
             }
             catch (Exception exception)
             {

@@ -1,22 +1,23 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using Microsoft.EntityFrameworkCore;
 using Serilog;
-
 using GeekHub.Data;
 using GeekHub.GitHub;
 using GeekHub.Models;
 using GeekHub.Requirements;
 using GeekHub.Services;
-
 namespace GeekHub
 {
     public class Startup
@@ -66,7 +67,8 @@ namespace GeekHub
 
             services.AddSingleton<IGitHubService, GitHubService>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
+            
             services.AddRazorPages();
 
             // In production, the React files will be served from this directory
