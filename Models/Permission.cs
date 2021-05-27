@@ -8,7 +8,7 @@
         
         CreateTicket,
         UpdateTicket,
-        DeleteTask,
+        DeleteTicket,
         
         AddUser,
         RemoveUser
