@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using GeekHub.Attributes;
@@ -8,6 +9,8 @@ using GeekHub.Data;
 using GeekHub.DTOs.Ticket;
 using GeekHub.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -59,20 +62,22 @@ namespace GeekHub.Controllers
         {
             try
             {
-                var project = await _dbContext.Projects.Include(p => p.Tags)
+                var project = await _dbContext.Projects.Include(p => p.Users)
                     .SingleOrDefaultAsync(p => p.Id == projectId);
                 if (project == default(Project)) return NotFound();
 
                 var authorization =
-                    await _authorizationService.AuthorizeAsync(User, project, Permission.CreateTask.ToString());
+                    await _authorizationService.AuthorizeAsync(User, project, Permission.CreateTicket.ToString());
                 if (!authorization.Succeeded) return Forbid();
-
+                
                 var ticket = _mapper.Map<Ticket>(createTicketRequestDto);
                 if (ticket.ParentTicketId is not null &&
                     await _dbContext.Tickets.FindAsync(ticket.ParentTicketId) is null) return NotFound();
+                if (ticket.ReporterId is not null && project.Users.SingleOrDefault(u => u.Id == ticket.ReporterId) ==
+                    default(ApplicationUser)) return BadRequest();
+                if (ticket.AssigneeId is not null && project.Users.SingleOrDefault(u => u.Id == ticket.AssigneeId) ==
+                    default(ApplicationUser)) return BadRequest();
                 
-                // TODO - add checks whether reporter/assignee is in project
-
                 ticket.ProjectId = projectId;
                 await _dbContext.Tickets.AddAsync(ticket);
                 await _dbContext.SaveChangesAsync();
@@ -82,6 +87,54 @@ namespace GeekHub.Controllers
             catch (Exception exception)
             {
                 Log.Fatal(exception, "Fatal error while creating project ticket");
+                return Problem();
+            }
+        }
+
+        [HttpPatch("{ticketId:guid}")]
+        public async Task<ActionResult<TicketResponseDto>> UpdateProjectTicket(
+            [FromRoute] Guid projectId,
+            [FromRoute] Guid ticketId,
+            [FromBody] JsonPatchDocument<UpdateTicketRequestDto> ticketPatchDoc 
+        )
+        {
+            try
+            {
+                var project = await _dbContext.Projects.Include(p => p.Users)
+                    .SingleOrDefaultAsync(p => p.Id == projectId);
+                if (project == default(Project)) return NotFound();
+
+                var authorization =
+                    await _authorizationService.AuthorizeAsync(User, project, Permission.UpdateTicket.ToString());
+                if (!authorization.Succeeded) return Forbid();
+
+                var ticket = await _dbContext.Tickets.FindAsync(ticketId);
+                if (ticket is null) return NotFound();
+
+                var ticketDto = _mapper.Map<UpdateTicketRequestDto>(ticket);
+
+                try
+                {
+                    ticketPatchDoc.ApplyTo(ticketDto);
+                }
+                catch (JsonPatchException)
+                {
+                    return BadRequest();
+                }
+
+                TryValidateModel(ticketDto);
+                
+                if (!ModelState.IsValid) return BadRequest();
+                
+                _mapper.Map(ticketDto, ticket);
+                _dbContext.Tickets.Update(ticket);
+                await _dbContext.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception, "Fatal error while updating project ticket");
                 return Problem();
             }
         }

@@ -24,8 +24,8 @@ namespace GeekHub.Extensions
         {
             var permissions = new List<Permission>
             {
-                Permission.CreateTask,
-                Permission.UpdateTask
+                Permission.CreateTicket,
+                Permission.UpdateTicket
             };
             
             foreach (var permission in permissions)

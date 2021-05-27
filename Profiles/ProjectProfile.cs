@@ -11,7 +11,7 @@ namespace GeekHub.Profiles
         {
             CreateMap<Project, ProjectResponseDto>().ReverseMap();
             CreateMap<CreateProjectRequestDto, Project>();
-            CreateMap<UpdateProjectRequestDto, Project>();
+            CreateMap<UpdateProjectRequestDto, Project>().ReverseMap();
         }
     }
 }

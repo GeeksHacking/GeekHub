@@ -9,10 +9,17 @@ namespace GeekHub.DTOs.Ticket
     {
         [Required] public string Name { get; set; }
         public string Description { get; set; }
-        [Required] public TicketType TicketType { get; set; }
-        [Required] public TicketStatus TicketStatus { get; set; }
-        public Guid ReporterId { get; set; }
-        public Guid AssigneeId { get; set; }
-        public Guid ParentTicketId { get; set; }
+
+        [Required]
+        [EnumDataType(typeof(TicketType))]
+        public TicketType TicketType { get; set; }
+
+        [Required]
+        [EnumDataType(typeof(TicketStatus))]
+        public TicketStatus TicketStatus { get; set; }
+
+        public Guid? ReporterId { get; set; }
+        public Guid? AssigneeId { get; set; }
+        public Guid? ParentTicketId { get; set; }
     }
 }

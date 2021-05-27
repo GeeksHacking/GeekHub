@@ -16,6 +16,8 @@ using GeekHub.DTOs.Project;
 using GeekHub.Extensions;
 using GeekHub.Models;
 using GeekHub.Services;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
 
 namespace GeekHub.Controllers
 {
@@ -95,7 +97,8 @@ namespace GeekHub.Controllers
                 // Add project
                 project = (await _dbContext.Projects.AddAsync(project)).Entity;
 
-                var dbLanguages = await _dbContext.Languages.Where(l => languages.Contains(l.Name)).Include(l => l.Projects).ToListAsync();
+                var dbLanguages = await _dbContext.Languages.Where(l => languages.Contains(l.Name))
+                    .Include(l => l.Projects).ToListAsync();
 
                 foreach (var language in languages)
                 {
@@ -136,7 +139,7 @@ namespace GeekHub.Controllers
         [HttpPatch("{projectId:guid}")]
         public async Task<ActionResult<ProjectResponseDto>> UpdateProject(
             [FromRoute] Guid projectId,
-            [FromBody] UpdateProjectRequestDto updateProjectRequestDto
+            [FromBody] JsonPatchDocument<UpdateProjectRequestDto> updateProjectRequestDto
         )
         {
             try
@@ -150,18 +153,24 @@ namespace GeekHub.Controllers
                     await _authorizationService.AuthorizeAsync(User, project, Permission.UpdateProject.ToString());
                 if (!authorization.Succeeded) return Forbid();
 
-                var updateProject = _mapper.Map<Project>(updateProjectRequestDto);
+                var projectDto = _mapper.Map<UpdateProjectRequestDto>(project);
 
-                if (updateProject.Name is not null && project.Name != updateProject.Name)
-                    project.Name = updateProject.Name;
-                if (updateProject.Description is not null && project.Description != updateProject.Description)
-                    project.Description = updateProject.Description;
-                if (updateProject.Repository is not null && project.Repository != updateProject.Repository)
+                try
                 {
-                    project.Repository = updateProject.Repository;
+                    updateProjectRequestDto.ApplyTo(projectDto);
+                }
+                catch (JsonPatchException)
+                {
+                    return BadRequest();
+                }
 
+                TryValidateModel(projectDto);
+
+                if (!ModelState.IsValid) return BadRequest();
+                if (projectDto.Repository != project.Repository.ToString())
+                {
                     // Validate that the project exists on GitHub, this isn't done in the validator as it is async
-                    var repositoryPathSplit = updateProjectRequestDto.Repository.Split("/");
+                    var repositoryPathSplit = projectDto.Repository.Split("/");
                     if (repositoryPathSplit.Length < 2) return BadRequest();
 
                     List<string> languages;
@@ -205,11 +214,12 @@ namespace GeekHub.Controllers
                         }
                     }
                 }
-                
+
+                _mapper.Map(projectDto, project);
                 _dbContext.Projects.Update(project);
                 await _dbContext.SaveChangesAsync();
 
-                return Ok(_mapper.Map<ProjectResponseDto>(project));
+                return NoContent();
             }
             catch (Exception exception)
             {
