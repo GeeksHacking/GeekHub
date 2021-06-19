@@ -11,8 +11,8 @@ import {
     ModalOverlay, useToast,
     VStack
 } from "@chakra-ui/react";
-import useProjects from "../../api/swr/projects/useProjects";
-import { create } from "../../api/http/projects";
+import useProjects from "../../../api/swr/projects/useProjects";
+import { create } from "../../../api/http/projects";
 
 export interface CreateProjectModalProps {
     isOpen: boolean;
@@ -37,9 +37,9 @@ export default function CreateProjectModal(props: CreateProjectModalProps): Reac
         try {
             await mutate(async (projects) => {
                 const project = await create({
-                    Name: projectName,
-                    Description: projectDescription,
-                    Repository: githubUrl
+                    name: projectName,
+                    description: projectDescription,
+                    repository: githubUrl
                 });
                 return [...(projects ?? []), project];
             });

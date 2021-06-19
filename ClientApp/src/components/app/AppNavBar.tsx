@@ -18,7 +18,7 @@ import {
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { OidcPaths } from "../../oidc/AuthorizationConstants";
 import { NavLink } from "react-router-dom";
-import CreateProjectModal from "./CreateProjectModal";
+import CreateProjectModal from "./Project/CreateProjectModal";
 
 const AppNavBar = (): ReactElement => {
 

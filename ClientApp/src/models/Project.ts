@@ -1,6 +1,6 @@
 export default interface Project {
-    Id: string;
-    Name: string;
-    Description: string;
-    Repository: string;
+    id: string;
+    name: string;
+    description: string;
+    repository: string;
 }

@@ -1,5 +1,5 @@
 export default interface CreateProjectRequest {
-    Name: string;
-    Description: string;
-    Repository: string;
+    name: string;
+    description: string;
+    repository: string;
 }

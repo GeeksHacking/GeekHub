@@ -12,7 +12,11 @@ namespace GeekHub.Profiles
             CreateMap<Ticket, TicketResponseDto>()
                 .ForMember(t => t.ReporterId, s => s.MapFrom(t => t.Reporter.Id))
                 .ForMember(t => t.AssigneeId, s => s.MapFrom(t => t.Assignee.Id))
-                .ForMember(t => t.ParentTicketId, s => s.MapFrom(t => t.ParentTicket.Id));
+                .ForMember(t => t.ParentTicketId, s => s.MapFrom(t => t.ParentTicket.Id))
+                .ForMember(t => t.TicketStatus, s =>
+                    s.MapFrom(t => t.TicketStatus.ToString()))
+                .ForMember(t => t.TicketType, s =>
+                    s.MapFrom(t => t.TicketType.ToString()));
             CreateMap<CreateTicketRequestDto, Ticket>();
             CreateMap<UpdateTicketRequestDto, Ticket>().ReverseMap();
         }
