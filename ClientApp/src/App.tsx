@@ -6,16 +6,12 @@ import { Flex } from "@chakra-ui/react";
 
 import Routes from "./routes";
 
-import { Provider, rootStore } from "./models/root";
-
 const App = (): React.ReactElement => (
-    <Provider value={rootStore}>
-        <Switch>
-            <Flex w={"100vw"} h={"100vh"} direction={"column"}>
-                <Routes/>
-            </Flex>
-        </Switch>
-    </Provider>
+    <Switch>
+        <Flex w={"100vw"} h={"100vh"} direction={"column"}>
+            <Routes/>
+        </Flex>
+    </Switch>
 );
 
 export default App;

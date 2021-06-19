@@ -1322,7 +1322,7 @@
   dependencies:
     "@chakra-ui/utils" "1.8.0"
 
-"@chakra-ui/icons@^1.0.13":
+"@chakra-ui/icons@^1.0.8":
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/@chakra-ui/icons/-/icons-1.0.13.tgz#d8eb04479b048d8023ae90d76205cd4a0bf7dd79"
   integrity sha512-twDpFz2uPVboMTEI4QA2y3EJND3G4+/9AVs730fgnnfhTw4EOJt0Lhfm4Spq1qi1LgHF16x4/Lao1E2imB5lWw==
@@ -4827,6 +4827,11 @@ depd@~1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
+dequal@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.2.tgz#85ca22025e3a87e65ef75a7a437b35284a7e319d"
+  integrity sha512-q9K8BlJVxK7hQYqa6XISGmBZbtQQWVXSrRrWreHC94rMt1QL/Impruc+7p2CYSYuVIUr+YCt6hjrs1kkdJRTug==
+
 des.js@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/des.js/-/des.js-1.0.1.tgz#5382142e1bdc53f85d86d53e5f4aa7deb91e0843"
@@ -8200,16 +8205,6 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-mobx-state-tree@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-5.0.1.tgz#d495725fe11075d8fde8f02ab65db6736b44e014"
-  integrity sha512-XZafwF1sJe6sp8L1kgf9Tz0SLo/UPf2pxsonnHaBQNsqbebw+0GC+IT3WxPEIe0/aQ73q4nY4SRgW1uyfd1KRA==
-
-mobx@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-6.2.0.tgz#9a5afe3525a0302691c7805d0df6ef60834d79e5"
-  integrity sha512-j5f16JIq2v4flvYCqaAB9tMtJt/y5efR2OO5Xy+w4/MBMeQ1WeGR0T8BtiNgmxM/OQzPFUKb5DTex9Y8a/yk+g==
-
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -11406,6 +11401,13 @@ svgo@^1.0.0, svgo@^1.2.2:
     stable "^0.1.8"
     unquote "~1.1.1"
     util.promisify "~1.0.0"
+
+swr@^0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/swr/-/swr-0.5.6.tgz#70bfe9bc9d7ac49a064be4a0f4acf57982e55a31"
+  integrity sha512-Bmx3L4geMZjYT5S2Z6EE6/5Cx6v1Ka0LhqZKq8d6WL2eu9y6gHWz3dUzfIK/ymZVHVfwT/EweFXiYGgfifei3w==
+  dependencies:
+    dequal "2.0.2"
 
 symbol-tree@^3.2.4:
   version "3.2.4"
