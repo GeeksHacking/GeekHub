@@ -1,13 +1,13 @@
 ﻿import * as React from "react";
 import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from "react";
 import {
-    Button,
+    Button, Flex,
     FormControl, FormLabel, Input,
     Modal,
     ModalBody,
     ModalContent, ModalFooter,
     ModalHeader,
-    ModalOverlay, Select, Spinner,
+    ModalOverlay, Select, Spinner, Textarea,
     useToast,
     VStack
 } from "@chakra-ui/react";
@@ -57,7 +57,7 @@ export default function CreateTicketModal(props: CreateTicketModalProps): Nullab
     }
 
     const onNameChange = (event: ChangeEvent<HTMLInputElement>) => setName(event.target.value);
-    const onDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => setDescription(event.target.value);
+    const onDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => setDescription(event.target.value);
     const onTicketTypeChange = (event: ChangeEvent<HTMLSelectElement>) => setTicketType(event.target.value);
     const onTicketStatusChange = (event: ChangeEvent<HTMLSelectElement>) => setTicketStatus(event.target.value);
     const onReporterIdChange = (event: ChangeEvent<HTMLSelectElement>) => setReporerId(event.target.value);
@@ -96,64 +96,68 @@ export default function CreateTicketModal(props: CreateTicketModalProps): Nullab
             <ModalContent>
                 <ModalHeader>New ticket</ModalHeader>
                 <ModalBody>
-                    <VStack spacing={"3"}>
-                        <FormControl>
-                            <FormLabel>Ticket name</FormLabel>
-                            <Input
-                                placeholder="Text here"
-                                value={name}
-                                onChange={onNameChange}
-                            />
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel>Description</FormLabel>
-                            <Input
-                                placeholder="Text here"
-                                value={description}
-                                onChange={onDescriptionChange}
-                            />
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel>Ticket type</FormLabel>
-                            <Select placeholder="Select type" onChange={onTicketTypeChange}>
-                                {ticketTypes.map((type, idx) => (
-                                    <option key={idx} value={type}>{type}</option>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel>Ticket status</FormLabel>
-                            <Select placeholder="Select status" onChange={onTicketStatusChange}>
-                                {ticketStatuses.map((status, idx) => (
-                                    <option key={idx} value={status}>{status}</option>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel>Reported by</FormLabel>
-                            <Select placeholder="Select a reporter" onChange={onReporterIdChange}>
-                                {projectUsers.map((user, idx) => (
-                                    <option key={idx} value={user.id}>{user.userName}</option>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel>Assigned to</FormLabel>
-                            <Select placeholder="Assign this ticket" onChange={onAssigneeIdChange}>
-                                {projectUsers.map((user, idx) => (
-                                    <option key={idx} value={user.id}>{user.userName}</option>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel>Parent ticket</FormLabel>
-                            <Select placeholder="Nest this ticket" onChange={onParentTicketIdChange}>
-                                {tickets.map((ticket, idx) => (
-                                    <option key={idx} value={ticket.id}>{ticket.name}</option>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </VStack>
+                    <Flex>
+                        <VStack spacing={"3"} mr={3} style={{ flex: 1 }}>
+                            <FormControl>
+                                <FormLabel>Ticket name</FormLabel>
+                                <Input
+                                    placeholder="Text here"
+                                    value={name}
+                                    onChange={onNameChange}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Description</FormLabel>
+                                <Textarea
+                                    placeholder="Text here"
+                                    value={description}
+                                    onChange={onDescriptionChange}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Parent ticket</FormLabel>
+                                <Select placeholder="Nest this ticket" onChange={onParentTicketIdChange}>
+                                    {tickets.map((ticket, idx) => (
+                                        <option key={idx} value={ticket.id}>{ticket.name}</option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </VStack>
+                        <VStack spacing={"3"} ml={1} style={{ flex: 1 }}>
+                            <FormControl>
+                                <FormLabel>Assigned to</FormLabel>
+                                <Select placeholder="Assign this ticket" onChange={onAssigneeIdChange}>
+                                    {projectUsers.map((user, idx) => (
+                                        <option key={idx} value={user.id}>{user.userName}</option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Reported by</FormLabel>
+                                <Select placeholder="Select a reporter" onChange={onReporterIdChange}>
+                                    {projectUsers.map((user, idx) => (
+                                        <option key={idx} value={user.id}>{user.userName}</option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Ticket type</FormLabel>
+                                <Select placeholder="Select type" onChange={onTicketTypeChange}>
+                                    {ticketTypes.map((type, idx) => (
+                                        <option key={idx} value={type}>{type}</option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Ticket status</FormLabel>
+                                <Select placeholder="Select status" onChange={onTicketStatusChange}>
+                                    {ticketStatuses.map((status, idx) => (
+                                        <option key={idx} value={status}>{status}</option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </VStack>
+                    </Flex>
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={createProject}>Create</Button>
