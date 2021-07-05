@@ -19,7 +19,7 @@ export default function AppSidebarLink(props: AppSidebarLinkProps): ReactElement
     return (
         <Link to={to}>
             <Box bg={pathname === to ? matchBg : "transparent"} py={2} px={3} mt={2} rounded={"base"} transition={"0.2s"}>
-                <Text fontWeight={"bold"}>{children}</Text>
+                <Text>{children}</Text>
             </Box>
         </Link>
     );

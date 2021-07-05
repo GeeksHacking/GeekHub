@@ -1,17 +1,6 @@
 import * as React from "react";
-import { Box, Flex } from "@chakra-ui/react";
-import AppNavBar from "../../components/app/AppNavBar";
-import AppSidebar from "../../components/app/AppSidebar";
+import { ReactElement } from "react";
 
-const Home = (): React.ReactElement => {
-    return (
-        <Flex direction={"column"} w={"100vw"} h={"100vh"}>
-            <AppNavBar/>
-            <Flex style={{ flex: 1 }}>
-                <AppSidebar/>
-            </Flex>
-        </Flex>
-    );
-};
-
-export default Home;
+export default function Home(): Nullable<ReactElement> {
+    return <div/>;
+}
