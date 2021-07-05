@@ -44,7 +44,7 @@ namespace GeekHub.Controllers
             {
                 var tickets = await _dbContext.Tickets.Include(t => t.Project).Where(t => t.Project.Id == projectId)
                     .ToListAsync();
-
+                
                 return Ok(_mapper.Map<IEnumerable<TicketResponseDto>>(tickets));
             }
             catch (Exception exception)
@@ -69,7 +69,7 @@ namespace GeekHub.Controllers
                 var authorization =
                     await _authorizationService.AuthorizeAsync(User, project, Permission.CreateTicket.ToString());
                 if (!authorization.Succeeded) return Forbid();
-                
+
                 var ticket = _mapper.Map<Ticket>(createTicketRequestDto);
                 if (ticket.ParentTicketId is not null &&
                     await _dbContext.Tickets.FindAsync(ticket.ParentTicketId) is null) return NotFound();
@@ -77,7 +77,7 @@ namespace GeekHub.Controllers
                     default(ApplicationUser)) return BadRequest();
                 if (ticket.AssigneeId is not null && project.Users.SingleOrDefault(u => u.Id == ticket.AssigneeId) ==
                     default(ApplicationUser)) return BadRequest();
-                
+
                 ticket.ProjectId = projectId;
                 await _dbContext.Tickets.AddAsync(ticket);
                 await _dbContext.SaveChangesAsync();
@@ -95,7 +95,7 @@ namespace GeekHub.Controllers
         public async Task<ActionResult<TicketResponseDto>> UpdateProjectTicket(
             [FromRoute] Guid projectId,
             [FromRoute] Guid ticketId,
-            [FromBody] JsonPatchDocument<UpdateTicketRequestDto> ticketPatchDoc 
+            [FromBody] JsonPatchDocument<UpdateTicketRequestDto> ticketPatchDoc
         )
         {
             try
@@ -123,9 +123,9 @@ namespace GeekHub.Controllers
                 }
 
                 TryValidateModel(ticketDto);
-                
+
                 if (!ModelState.IsValid) return BadRequest();
-                
+
                 _mapper.Map(ticketDto, ticket);
                 _dbContext.Tickets.Update(ticket);
                 await _dbContext.SaveChangesAsync();
@@ -135,6 +135,38 @@ namespace GeekHub.Controllers
             catch (Exception exception)
             {
                 Log.Fatal(exception, "Fatal error while updating project ticket");
+                return Problem();
+            }
+        }
+
+        [HttpGet("Types")]
+        public ActionResult<IEnumerable<string>> ReadTicketTypes(
+            [FromRoute] Guid projectId
+        )
+        {
+            try
+            {
+                return Enum.GetNames<TicketType>();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception, "Fatal error while reading ticket types");
+                return Problem();
+            }
+        }
+        
+        [HttpGet("Statuses")]
+        public ActionResult<IEnumerable<string>> ReadTicketStatuses(
+            [FromRoute] Guid projectId
+        )
+        {
+            try
+            {
+                return Enum.GetNames<TicketStatus>();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception, "Fatal error while reading ticket statuses");
                 return Problem();
             }
         }
