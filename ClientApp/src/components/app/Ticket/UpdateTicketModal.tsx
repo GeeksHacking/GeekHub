@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, ReactElement, useMemo, useState } from "react";
 import {
     Button, Flex,
     FormControl, FormLabel, Input,
@@ -11,6 +11,7 @@ import {
     useToast,
     VStack
 } from "@chakra-ui/react";
+import { compare } from "fast-json-patch";
 import useTickets from "../../../api/swr/tickets/useTickets";
 import ticketsApi from "../../../api/http/tickets";
 import useTicketTypes from "../../../api/swr/tickets/useTicketTypes";
@@ -19,28 +20,45 @@ import useProjectUsers from "../../../api/swr/projects/useProjectUsers";
 
 export interface CreateTicketModalProps {
     projectId: string;
+    ticketId: string;
     isOpen: boolean;
     onClose: () => void;
 }
 
-export default function CreateTicketModal(props: CreateTicketModalProps): Nullable<ReactElement> {
-    const { projectId, isOpen, onClose } = props;
+export default function UpdateTicketModal(props: CreateTicketModalProps): Nullable<ReactElement> {
+    const { projectId, ticketId, isOpen, onClose } = props;
 
     const { data: tickets, error: ticketsError, mutate } = useTickets(projectId);
     const { data: ticketTypes, error: ticketTypesError } = useTicketTypes(projectId);
     const { data: ticketStatuses, error: ticketStatusesError } = useTicketStatuses(projectId);
     const { data: projectUsers, error: projectUsersError } = useProjectUsers(projectId);
 
-    const { create } = ticketsApi(projectId);
+    const { update } = ticketsApi(projectId);
     const toast = useToast();
 
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [ticketType, setTicketType] = useState("");
-    const [ticketStatus, setTicketStatus] = useState("");
-    const [reporterId, setReporterId] = useState("");
-    const [assigneeId, setAssigneeId] = useState("");
-    const [parentTicketId, setParentTicketId] = useState("");
+    const ticket = useMemo(() => {
+        const placeholder = {
+            name: "",
+            description: "",
+            ticketType: "",
+            ticketStatus: "",
+            reporterId: "",
+            assigneeId: "",
+            parentTicketId: ""
+        };
+        if (!tickets) {
+            return placeholder;
+        }
+        return tickets.find(t => t.id === ticketId) ?? placeholder;
+    }, [ticketId, tickets]);
+
+    const [name, setName] = useState(ticket.name);
+    const [description, setDescription] = useState(ticket.description);
+    const [ticketType, setTicketType] = useState(ticket.ticketType);
+    const [ticketStatus, setTicketStatus] = useState(ticket.ticketStatus);
+    const [reporterId, setReporterId] = useState(ticket.reporterId);
+    const [assigneeId, setAssigneeId] = useState(ticket.assigneeId);
+    const [parentTicketId, setParentTicketId] = useState(ticket.parentTicketId);
 
     if (ticketsError || ticketTypesError || ticketStatusesError || projectUsersError) {
         toast({
@@ -67,7 +85,8 @@ export default function CreateTicketModal(props: CreateTicketModalProps): Nullab
     const createProject = async () => {
         try {
             await mutate(async (tickets) => {
-                const project = await create({
+                const updatedTicket = await update(ticketId, compare(ticket, {
+                    id: ticketId,
                     name,
                     description,
                     ticketType,
@@ -75,8 +94,9 @@ export default function CreateTicketModal(props: CreateTicketModalProps): Nullab
                     reporterId,
                     assigneeId,
                     parentTicketId
-                });
-                return [...(tickets ?? []), project];
+                }));
+                const filteredTickets = (tickets ?? []).filter(t => t.id !== updatedTicket.id);
+                return [...filteredTickets, updatedTicket];
             });
             onClose();
         } catch (e) {
@@ -94,7 +114,7 @@ export default function CreateTicketModal(props: CreateTicketModalProps): Nullab
         <Modal isOpen={isOpen} onClose={onClose} size={"3xl"}>
             <ModalOverlay/>
             <ModalContent>
-                <ModalHeader>New ticket</ModalHeader>
+                <ModalHeader>Update ticket</ModalHeader>
                 <ModalBody>
                     <Flex>
                         <VStack spacing={"3"} mr={3} style={{ flex: 1 }}>
@@ -160,7 +180,7 @@ export default function CreateTicketModal(props: CreateTicketModalProps): Nullab
                     </Flex>
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={createProject} isDisabled={!name || !ticketType || !ticketStatus}>Create</Button>
+                    <Button onClick={createProject} isDisabled={!name || !ticketType || !ticketStatus}>Update</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

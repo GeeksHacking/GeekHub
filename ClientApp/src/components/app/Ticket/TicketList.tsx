@@ -7,6 +7,7 @@ import useTickets from "../../../api/swr/tickets/useTickets";
 import Ticket from "../../../models/Ticket";
 import TicketListItem from "./TicketListItem";
 import CreateTicketModal from "./CreateTicketModal";
+import UpdateTicketModal from "./UpdateTicketModal";
 
 export interface TicketListProps {
     project: Project;
@@ -18,7 +19,9 @@ export default function TicketList(props: TicketListProps): Nullable<ReactElemen
     const toast = useToast();
     const { data, error } = useTickets(project.id);
 
+    const [selectedTicketId, setSelectedTicketId] = useState("");
     const [createModalOpen, setCreateModalOpen] = useState(false);
+    const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const tickets = useMemo(() => {
         if (!data) return;
         return data.reduce((a: Record<string, Ticket[]>, t) => {
@@ -46,10 +49,21 @@ export default function TicketList(props: TicketListProps): Nullable<ReactElemen
 
     const openCreateModal = () => setCreateModalOpen(true);
     const closeCreateModal = () => setCreateModalOpen(false);
+    const openUpdateModal = (id: string) => {
+        setSelectedTicketId(id);
+        setUpdateModalOpen(true);
+    };
+    const closeUpdateModal = () => {
+        setSelectedTicketId("");
+        setUpdateModalOpen(false);
+    };
 
     return (
         <Box height={"calc(100vh - 108px)"} maxHeight={"calc(100vh - 140px)"} overflowY={"scroll"}>
             <CreateTicketModal projectId={project.id} isOpen={createModalOpen} onClose={closeCreateModal}/>
+            {updateModalOpen &&
+            <UpdateTicketModal projectId={project.id} ticketId={selectedTicketId} isOpen={updateModalOpen}
+                onClose={closeUpdateModal}/>}
             {Object.keys(tickets).map((type, idx) => (
                 <>
                     <Box key={idx} mt={3}>
@@ -61,7 +75,8 @@ export default function TicketList(props: TicketListProps): Nullable<ReactElemen
                             <Text size={"xs"} style={{ flex: 0.5 }}>Type</Text>
                         </Flex>
                         {tickets[type].map(ticket => (
-                            <TicketListItem ticket={ticket} projectId={project.id} key={ticket.id}/>
+                            <TicketListItem ticket={ticket} projectId={project.id}
+                                onClick={() => openUpdateModal(ticket.id)} key={ticket.id}/>
                         ))}
                     </Box>
                     {idx === Object.keys(tickets).length - 1 && <Box h={20}/>}
