@@ -1,17 +1,23 @@
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.EntityFrameworkCore;
-using GeekHub.Data;
-using GeekHub.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using GeekHub.Data;
+using GeekHub.GitHub;
+using GeekHub.Models;
+using GeekHub.Requirements;
+using GeekHub.Services;
 namespace GeekHub
 {
     public class Startup
@@ -26,12 +32,15 @@ namespace GeekHub
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add database
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            // Add identity
             services.AddDefaultIdentity<ApplicationUser>(options => { options.SignIn.RequireConfirmedEmail = false; })
+                .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
@@ -40,7 +49,26 @@ namespace GeekHub
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddControllersWithViews();
+            services.AddAuthorization();
+
+            services.AddTransient<IAuthorizationHandler, PermissionRequirementHandler>();
+            services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+
+            // Add mappings
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
+            // Add GitHub Api Client
+            services.AddHttpClient("GitHubApi", c =>
+                {
+                    c.BaseAddress = new Uri("https://api.github.com");
+                    c.DefaultRequestHeaders.Add("User-Agent", "GeekHub");
+                })
+                .AddTypedClient(Refit.RestService.For<IGitHubApi>);
+
+            services.AddSingleton<IGitHubService, GitHubService>();
+
+            services.AddControllersWithViews().AddNewtonsoftJson();
+            
             services.AddRazorPages();
 
             // In production, the React files will be served from this directory
@@ -61,6 +89,8 @@ namespace GeekHub
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

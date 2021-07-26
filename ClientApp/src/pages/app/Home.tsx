@@ -1,7 +1,6 @@
 import * as React from "react";
+import { ReactElement } from "react";
 
-const Home = (): React.ReactElement => {
-    return <></>;
-};
-
-export default Home;
+export default function Home(): Nullable<ReactElement> {
+    return <div/>;
+}
