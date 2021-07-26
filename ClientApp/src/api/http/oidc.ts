@@ -5,6 +5,7 @@ export interface OidcConfigResponse {
     automaticSilentRenew?: boolean;
     includeIdTokenInSilentRenew?: boolean;
     userStore?: WebStorageStateStore;
+    authority?: string;
 }
 
 export const get = async (path: string): Promise<OidcConfigResponse> => {

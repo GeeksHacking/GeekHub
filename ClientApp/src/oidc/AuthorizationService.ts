@@ -211,6 +211,7 @@ export class AuthorizationService {
           data.userStore = new WebStorageStateStore({
               prefix: ApplicationName,
           });
+          data.authority = "https://geekhub.geekshacking.com";
 
           this._userManager = new UserManager(data);
 

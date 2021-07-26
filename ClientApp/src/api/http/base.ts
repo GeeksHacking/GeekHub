@@ -2,7 +2,7 @@ import ky from "ky";
 import authorizationService from "../../oidc/AuthorizationService";
 
 export const apiClient = ky.create({
-    prefixUrl: "/",
+    prefixUrl: "https://geekhub.geekshacking.com/",
     hooks: {
         beforeRequest: [
             async (request) => {
@@ -24,5 +24,5 @@ export const apiClient = ky.create({
 });
 
 export const authClient = ky.create({
-    prefixUrl: "/"
+    prefixUrl: "https://geekhub.geekshacking.com/"
 });

@@ -18,6 +18,10 @@ using GeekHub.GitHub;
 using GeekHub.Models;
 using GeekHub.Requirements;
 using GeekHub.Services;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 namespace GeekHub
 {
     public class Startup
@@ -51,6 +55,18 @@ namespace GeekHub
 
             services.AddAuthorization();
 
+            services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme,
+                options =>
+                {
+                    options.Authority = "https://geekhub.geekshacking.com";
+                    options.ClaimsIssuer = "https://geekhub.geekshacking.com";
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false
+                    };
+                });
+
             services.AddTransient<IAuthorizationHandler, PermissionRequirementHandler>();
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
@@ -68,7 +84,7 @@ namespace GeekHub
             services.AddSingleton<IGitHubService, GitHubService>();
 
             services.AddControllersWithViews().AddNewtonsoftJson();
-            
+
             services.AddRazorPages();
 
             // In production, the React files will be served from this directory
@@ -87,12 +103,12 @@ namespace GeekHub
             {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                // app.UseHsts();
             }
 
             app.UseSerilogRequestLogging();
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
