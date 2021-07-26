@@ -25,7 +25,7 @@ namespace GeekHub
             Log.Information("Building host...");
             var host = CreateHostBuilder(args).Build();
             Log.Information("Host built");
-            
+
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -45,14 +45,14 @@ namespace GeekHub
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 Log.Information("Creating Db...");
-                if (env.IsDevelopment())
-                {
-                    await context.Database.EnsureCreatedAsync();
-                }
-                else
-                {
-                    await context.Database.MigrateAsync();
-                }
+                // if (env.IsDevelopment())
+                // {
+                await context.Database.EnsureCreatedAsync();
+                // }
+                // else
+                // {
+                //     await context.Database.MigrateAsync();
+                // }
                 Log.Information("Db created");
             }
             catch (Exception ex)

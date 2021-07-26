@@ -9,10 +9,11 @@ import TicketTypeTag from "./TicketTypeTag";
 export interface TicketListItemProps {
     ticket: Ticket;
     projectId: string;
+    onClick: () => void;
 }
 
 export default function TicketListItem(props: TicketListItemProps): Nullable<ReactElement> {
-    const { ticket, projectId } = props;
+    const { ticket, projectId, onClick } = props;
 
     const toast = useToast();
     const bg = useColorModeValue("gray.100", "gray.700");
@@ -30,7 +31,7 @@ export default function TicketListItem(props: TicketListItemProps): Nullable<Rea
     }
 
     return (
-        <Flex bg={bg} boxShadow={"base"} px={5} py={2} my={1} h={12} borderRadius={"md"}>
+        <Flex bg={bg} boxShadow={"base"} px={5} py={2} my={1} h={12} borderRadius={"md"} onClick={onClick}>
             <Text style={{ flex: 2 }}>
                 {ticket.name}
             </Text>
@@ -39,11 +40,11 @@ export default function TicketListItem(props: TicketListItemProps): Nullable<Rea
                     <Tag size="lg" colorScheme="red" borderRadius="full">
                         <Avatar
                             size={"xs"}
-                            name={reporter.userName}
+                            name={reporter.displayName}
                             ml={-1}
                             mr={2}
                         />
-                        <TagLabel>{reporter.userName}</TagLabel>
+                        <TagLabel>{reporter.displayName}</TagLabel>
                     </Tag>
                 )}
             </Box>
@@ -52,11 +53,11 @@ export default function TicketListItem(props: TicketListItemProps): Nullable<Rea
                     <Tag size="lg" colorScheme="red" borderRadius="full">
                         <Avatar
                             size={"xs"}
-                            name={assignee.userName}
+                            name={assignee.displayName}
                             ml={-1}
                             mr={2}
                         />
-                        <TagLabel>{assignee.userName}</TagLabel>
+                        <TagLabel>{assignee.displayName}</TagLabel>
                     </Tag>
                 )}
             </Box>
